@@ -8,8 +8,8 @@
 -   **Class:** TE-AI&DS
 -   **Semester:** V
 -   **Experiment Number:** 6
--   **Student Name:** Rushikesh Subhash Khemnar
--   **Roll No.:** 81
+-   **Student Name:** Aayush Hemant Patil
+-   **Roll No.:** 84
 
 ## Title
 
