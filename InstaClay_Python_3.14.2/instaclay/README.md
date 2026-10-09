@@ -1,103 +1,236 @@
-# InstaClay — Python 3.14.2 Edition
+<div align="center">
 
-A complete Statistics for Machine Learning and Data Science project with a light claymorphism Streamlit interface. The target is **likes + comments**, using only post details that can be supplied before publication.
+# 🌸 InstaClay 🌸
+### Your little Instagram engagement studio
 
-See **WINDOWS_SETUP.md** for VS Code setup and troubleshooting. Run `start_windows.bat` to set up and launch; `retrain_windows.bat` rebuilds models.
+![Animated InstaClay banner](assets/instaclay_banner.gif)
 
-## Start on Windows
+**Plan a post ✍️ · Explore patterns 📊 · Compare ideas 💕**
 
-1. Use **Python 3.14.2** from https://www.python.org/downloads/ (include the Python launcher).
-2. Extract the ZIP completely. Do not launch from inside the ZIP preview.
-3. Open the `instaclay` folder and double-click **start_windows.bat**.
-4. Open http://localhost:8501 if your browser does not open automatically.
+![Python](https://img.shields.io/badge/Python-3.14.2-A7C7E7?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FFB7C5?style=for-the-badge&logo=streamlit&logoColor=white)
+![Theme](https://img.shields.io/badge/Theme-Light%20Claymorphism-C9B6E4?style=for-the-badge)
 
-The first launch installs dependencies and requires internet access. The app itself works offline. Leave the terminal open; Ctrl+C stops the server. The supplied trained model is ready to use, so retraining is optional.
+**୨୧ Made for curious minds & creative post ideas ୨୧**
 
-### Manual PowerShell commands
+</div>
 
-```powershell
-cd "C:\path\to\instaclay"
-py -3.14 -m venv .venv314
-.\.venv314\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv314\Scripts\python.exe -m streamlit run app.py
-```
+---
 
-No activation command or PowerShell execution-policy change is required.
+## 🐰 What is InstaClay?
 
-### macOS / Linux
+A cute Streamlit app that explores Instagram data and estimates **likes + comments** from your planned post details.
 
-Install Python 3.14, then run `bash start_unix.sh` from this folder.
+> 🌷 **Keep expectations realistic:** this is an academic ML project. Its predictions have limited reliability; it cannot promise likes or virality.
 
-### Docker
+## 🎀 What’s inside?
 
-```bash
-docker build -t instaclay .
-docker run --rm -p 8501:8501 instaclay
-```
+| 🌸 Page | ✨ What it does |
+|---|---|
+| 🏡 Overview | Shows post counts, engagement charts, and content mix |
+| 🔮 Predict a post | Estimates interactions with an 80% prediction range |
+| 💕 Compare two posts | Compares two ideas and shows uncertainty |
+| 📊 Statistics | Explores formats, timing, and caption patterns |
+| 🤖 Model performance | Shows the models’ real test results |
+| 🧹 Data & methods | Explains cleaning, features, and limitations |
 
-### Optional hosted deployment
+**Soft colors + rounded cards + gentle shadows = light claymorphism ☁️**
 
-Use Python 3.14 and `app.py` as the entrypoint. Include `core.py`, `artifacts/`, `requirements.txt`, and `.streamlit/config.toml`. Raw CSV and training code are needed only for retraining. The interface exposes cleaned-data downloads; remove those buttons and identifying columns before publishing a public demo if that data should not be distributed. No hosting account or deployment is created by this package.
+## 🚀 Start in 3 steps
 
-## Features
+### ① 🐍 Use Python 3.14.2
 
-- Overview: dataset metrics, engagement distribution, content mix.
-- Predict a post: caption, hashtags, format, date, time and timezone; point estimate and 80% prediction interval.
-- Compare two posts: model preference, absolute difference and an uncertainty-overlap notice; CSV export.
-- Statistics: distributions, posting-hour patterns, rank correlations, corrected hypothesis tests and descriptive statistics.
-- Model performance: cross-validation, separate test metrics, observed versus predicted chart and permutation importance.
-- Data & methods: cleaning audit, excluded inputs, split sizes, limitations and downloads.
-
-## Dataset actually used
-
-The uploaded `instagram_posts.csv` has **1,000 rows and 40 columns**, with one post per account. This package uses this exact uploaded file, not the previously discussed 178,922-row file or merged dataset. A SHA-256 fingerprint is in `artifacts/report.json`.
-
-112 posts have missing likes and are excluded from supervised training; **888 labeled posts** remain. Missing likes are not zero. Genuine large counts are preserved; there is no arbitrary removal of viral posts. Captions are normalized using Unicode NFKC and whitespace cleanup. Missing captions become empty strings, acknowledging that absence cannot be distinguished from collection failure. Hashtags are parsed from caption and serialized list, case-folded and deduplicated. Times are parsed with UTC awareness; planner timezones are converted to UTC using the same feature function. Invalid targets, IDs and timestamps are excluded and audited.
-
-## Model design and honesty
-
-Predictors: caption length, word count, hashtag count, mentions, exclamation/question counts, cyclic hour and weekday, and content type. Caption semantics, sentiment and image content are not modeled. Changing words without changing these structural features can give identical predictions.
-
-Excluded inputs: likes, comments, views, engagement scores, post/user IDs, followers, account post count and account flags. The last three are collection-time values without evidence they were known at publication. This exclusion limits predictive power but respects the requested pre-publication scope.
-
-Comparison: median baseline, Linear Regression, Random Forest and histogram Gradient Boosting. All are trained on log(1 + engagement) because counts are strongly skewed. Estimates are obtained with expm1 and constrained to nonnegative values. This emphasizes multiplicative error and typical engagement rather than estimating an unbiased arithmetic mean for viral posts.
-
-A fixed seeded account-disjoint 60/20/20 split separates training (532), calibration (178) and test (178). Five-fold grouped cross-validation on training data selects hyperparameters and model using log-scale RMSE (RMSLE); learned preprocessing stays inside each fold. No test-driven model selection occurs. Random Forest wins CV; Linear Regression is slightly better on test RMSLE. The test set is deliberately not used to switch winners. The shipped model is the exact evaluated model, not a refit on test data.
-
-The model's **raw test R² is negative**, and its log-scale R² is only about 0.063. This means the file supports a working academic pipeline but **does not support precise engagement predictions**. More algorithm tuning cannot manufacture missing audience information or a consistent measurement window. The interface reports the actual measured performance; it never converts regression error into a fabricated accuracy percentage.
-
-Split-conformal prediction ranges use the absolute log residual on the separate calibration set and the finite-sample 80% quantile. They are individual outcome ranges, not confidence intervals for the mean and not statistical tests of a comparison. Coverage relies on exchangeability and can fail for future distribution shifts. The sample has no fixed observation horizon, so estimates cannot be labeled “seven-day engagement.” Dates spanning 2013–2025 describe historical material, not a representative current Instagram population.
-
-## Statistical analysis
-
-Descriptive statistics and a 2,000-resample bootstrap median interval are exported. Kruskal–Wallis tests compare engagement distributions across content formats, UTC time blocks and weekdays. Holm correction covers these three tests; epsilon-squared gives an effect-size estimate. Spearman correlations across six structural features have a separate Holm correction. Tests describe associations, not causal gains or guaranteed best posting times. No pairwise post-hoc claim is made. Exploratory charts use the full cleaned sample; model tuning uses the designated training split only.
-
-## Reproduce
+Check your installed version:
 
 ```powershell
-.\.venv314\Scripts\python.exe train.py
+python --version
+```
+
+### ② 📂 Extract & open
+
+Extract the project ZIP fully. Open the **instaclay** folder in VS Code.
+
+### ③ ▶️ Run!
+
+```powershell
+.\start_windows.bat
+```
+
+The launcher creates `.venv314`, installs packages, checks the model, and starts the app. First setup needs internet. 💻
+
+🌐 Open **[localhost:8501](http://localhost:8501)** if needed.  
+🛑 Keep the terminal open; press **Ctrl+C** to stop.
+
+> 🐾 Use the **Python 3.14.2 project ZIP** with this README. You can also double-click its `start_windows.bat`.
+
+## ✍️ Try your first prediction
+
+1. 🔮 Open **Predict a post**.
+2. 💬 Enter your caption and hashtags.
+3. 🖼️ Choose the post format.
+4. 🕒 Choose date, time, and timezone.
+5. ✨ Click **Estimate engagement**.
+6. 📥 Read the estimate and range, or download the result.
+
+**Example input:** a photo caption + `#art #design` + Image + planned posting time.
+
+💕 Want to compare two ideas? Open **Compare two posts**. If their ranges overlap, there is no clear winner within that uncertainty.
+
+## 🧺 Our data, simply explained
+
+| 🧸 Detail | 🌷 Value |
+|---|---:|
+| Raw posts | 1,000 |
+| Raw columns | 40 |
+| Usable posts | 888 |
+| Rows excluded for missing likes | 112 |
+| Content formats | Image · Carousel · Reel · Video |
+| Median likes + comments | 71 |
+
+📌 This build contains **1,000 raw posts**, not the previously discussed 7,730-post dataset.
+
+🧹 Cleaning removes invalid targets, checks IDs/timestamps, tidies captions, and deduplicates hashtags. Missing likes are **not** treated as zero.
+
+## 🧠 What does the model look at?
+
+**💬 Caption:** characters, words, mentions, `!`, and `?`  
+**🏷️ Hashtags:** unique hashtag count  
+**🕒 Timing:** posting hour and weekday, converted to UTC  
+**🖼️ Format:** Image, Carousel, Reel, or Video
+
+It does **not** understand caption meaning or inspect your photo/video. Different wording can give the same estimate if these features stay identical. 🐣
+
+Likes/comments form the target. Views, IDs, and collection-time followers are excluded from predictors.
+
+## 🪄 How it works
+
+```mermaid
+flowchart TD
+    A["📂 Instagram CSV"] --> B["🧹 Clean + build features"]
+    B --> C["📊 Explore statistics"]
+    B --> D["🧺 Split by account"]
+    D --> E["🤖 Train + choose model"]
+    E --> F["🎯 Calibrate + test"]
+    F --> G["🌸 Streamlit dashboard"]
+    C --> G
+```
+
+🧺 **Split:** 532 training · 178 calibration · 178 test posts.  
+🔁 **Selection:** five-fold grouped cross-validation on training data.  
+📏 **Learning target:** `log(1 + likes + comments)`, converted back to counts.
+
+## 🤖 Meet the models
+
+| Model | Simple explanation |
+|---|---|
+| 🐢 Median baseline | Gives the same typical estimate to every post |
+| 📏 Linear Regression | Learns a linear relationship from the features |
+| 🌳 Random Forest | Combines many decision trees |
+| 🌱 Gradient Boosting | Builds trees that improve earlier predictions |
+
+**🌳 Deployed model: Random Forest** — 300 trees, selected by lowest training CV RMSLE.
+
+## 🎯 How accurate is it?
+
+**There is no honest single “accuracy %” for this regression app.** These are the actual results on 178 unseen test posts:
+
+| Model | MAE ↓ | RMSLE ↓ | Raw R² ↑ |
+|---|---:|---:|---:|
+| 🐢 Baseline | 4,481.13 | 2.4828 | −0.0233 |
+| 📏 Linear Regression | 4,477.28 | 2.3987 | −0.0214 |
+| 🌳 **Random Forest** | **4,473.64** | **2.4032** | **−0.0223** |
+| 🌱 Gradient Boosting | 4,493.33 | 2.4691 | −0.0194 |
+
+- 📏 **MAE:** average absolute error in likes + comments; viral posts strongly affect the average.
+- 📉 **RMSLE:** error on a logarithmic scale; smaller is better.
+- ⚠️ **Negative R²:** worse squared count error than the test-mean benchmark.
+
+**Honest takeaway:** the app works, but the dataset supports weak predictions. Audience information and a consistent measurement window are missing. 🌧️
+
+### ☁️ What does the 80% range mean?
+
+The calibrated range covered **79.21% of held-out outcomes**. That is **coverage, not prediction accuracy**. Ranges can be wide, and future data may behave differently.
+
+The estimate is **total observed interactions**, not engagement rate or a seven-day forecast.
+
+## 📊 Statistics in a tiny nutshell
+
+| Tool | What it helps explain |
+|---|---|
+| 🧮 Descriptive statistics | Typical values and spread |
+| 🎲 Bootstrap | Uncertainty around median engagement |
+| 🔗 Spearman correlation | Whether features move together |
+| ⚖️ Kruskal–Wallis | Whether group distributions differ |
+| 🛡️ Holm correction | Adjusts for multiple comparisons |
+| 📐 Epsilon squared | Estimated size of group differences |
+| 🔍 Permutation importance | Which inputs affect model scoring |
+
+🌷 **Findings:** content formats differ statistically, with a small estimated effect. Time blocks and weekdays show no significant difference in this sample. Median engagement is **71**, with a bootstrap interval of **59–87**.
+
+🐾 Associations do not prove that changing a caption, hashtag, or posting time causes better engagement.
+
+## 📁 Where is everything?
+
+| File / folder | Purpose |
+|---|---|
+| `app.py` | 🌸 Dashboard |
+| `core.py` | 🧹 Cleaning and prediction helpers |
+| `train.py` | 🤖 Training and statistics |
+| `bootstrap.py` | 🚀 Startup checks |
+| `data/` | 🧺 Raw Instagram sample |
+| `artifacts/` | 📊 Model, results, and cleaned data |
+| `tests/` | ✅ Automated checks |
+| `.vscode/` | 💻 VS Code launch settings |
+| `requirements.txt` | 📦 Dependencies |
+
+**Stack:** Python · Streamlit · pandas · NumPy · scikit-learn · SciPy · Plotly · joblib · tzdata 🛠️
+
+## 🔁 Retrain or test
+
+Stop the app before retraining:
+
+```powershell
+.\retrain_windows.bat
+```
+
+Run the tests after setup:
+
+```powershell
 .\.venv314\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-Retraining overwrites `artifacts/`. Restart Streamlit after retraining to clear cached models. Do not tune repeatedly against the exported test results; a new tuning cycle needs a fresh holdout for an unbiased final assessment. The script expects the same input schema; replacing the data with unrelated CSV columns requires deliberate adaptation.
+Retraining replaces model/analysis files. Restart Streamlit afterward. Fixed seeds, exported splits, and recorded versions help reproduce the results. 🔬
 
-## Files
+## 🩹 Quick fixes
 
-- `app.py`: complete light-mode dashboard.
-- `core.py`: shared cleaning, feature construction and inference.
-- `train.py`: statistical analysis, cross-validation, calibration, evaluation and export.
-- `data/instagram_posts.csv`: exact uploaded input.
-- `artifacts/model.joblib`: trained pipelines and calibration information.
-- `artifacts/*.csv`: cleaned data, split manifest, statistics, scores and predictions.
-- `artifacts/report.json`: machine-readable audit, metrics and limitations.
-- `RESULTS.md`: readable measured results.
-- `tests/test_project.py`: parser, target, leakage, split, prediction and interface tests.
-- launchers, Dockerfile and pinned dependencies for deployment.
+| Problem | Fix |
+|---|---|
+| 🐍 Python not found | Check Python 3.14, then restart VS Code |
+| 📦 Installation failed | Read the first pip error and check internet access |
+| 🔌 Port 8501 is busy | Stop the earlier Streamlit app |
+| 🤖 Model cannot load | Run `retrain_windows.bat` |
+| 🔄 Old results still appear | Restart Streamlit |
 
-Only load the supplied model or models you trained yourself: joblib is a Python serialization format and arbitrary third-party files can execute code.
+✅ Training, dashboard tests, and server startup passed on **Python 3.14.2 on Linux**. Windows 64-bit dependency packages were verified. Native Windows batch execution was not tested.
 
-## References
+## 🌱 Future ideas
 
-- Scikit-learn leakage and pipelines: https://scikit-learn.org/stable/common_pitfalls.html
-- Streamlit testing: https://docs.streamlit.io/develop/concepts/app-testing
-- Dataset provenance is supplied by the user's uploaded file. Its exact checksum is recorded; public-source authenticity was not independently certified in this build.
+📚 More labeled data · 👥 Verified pre-post audience size · 🖼️ Image features · 💬 Caption meaning · 🗓️ Fixed engagement measurement window
+
+*These are future improvements, not current features.*
+
+## 📌 Before sharing on GitHub
+
+Exclude virtual environments/caches, check dataset redistribution rights, and choose a license. Public dashboards can expose downloadable data. Only load trusted joblib models. 🔐
+
+---
+
+<div align="center">
+
+### 🐰 🌸 ☁️ 🎀 ✨
+**Plan thoughtfully. Measure honestly.**
+
+*Statistics for Machine Learning and Data Science*  
+**Made with curiosity & pastel pixels ♡**
+
+</div>
