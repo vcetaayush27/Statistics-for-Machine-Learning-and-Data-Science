@@ -1,0 +1,5 @@
+model,cv_rmsle,cv_sd,parameters
+Random Forest,2.4222562672592103,0.25856699028092645,"{'model__max_features': 0.7, 'model__min_samples_leaf': 20}"
+Linear Regression,2.4405187608834638,0.2844477321105724,{}
+Median baseline,2.487748247255884,0.26488343329974284,{}
+Gradient Boosting,2.6207048951552627,0.18969141788388405,"{'model__l2_regularization': 10.0, 'model__max_leaf_nodes': 7}"

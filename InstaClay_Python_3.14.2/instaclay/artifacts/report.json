@@ -1,0 +1,116 @@
+{
+  "input_rows": 1000,
+  "missing_captions": 36,
+  "missing_hashtag_fields": 366,
+  "duplicate_post_ids_removed": 0,
+  "missing_or_invalid_targets_removed": 112,
+  "invalid_metadata_removed_after_targets": 0,
+  "clean_rows": 888,
+  "accounts": 888,
+  "oldest_post": "2013-03-25 15:06:34+00:00",
+  "newest_post": "2025-12-17 14:10:39+00:00",
+  "median_engagement": 71.0,
+  "max_engagement": 282623.0,
+  "statistics": {
+    "median_95_bootstrap_ci": [
+      59.0,
+      87.0
+    ],
+    "tests": [
+      {
+        "comparison": "content_type",
+        "test": "Kruskal\u2013Wallis",
+        "statistic": 34.627258787457976,
+        "p_value": 1.460408523657126e-07,
+        "epsilon_squared": 0.035777442067260155,
+        "groups": 4,
+        "n": 888,
+        "p_holm": 4.381225570971378e-07,
+        "significant_005": true
+      },
+      {
+        "comparison": "time_block",
+        "test": "Kruskal\u2013Wallis",
+        "statistic": 3.136294060862062,
+        "p_value": 0.37108492556688844,
+        "epsilon_squared": 0.0001541788018801606,
+        "groups": 4,
+        "n": 888,
+        "p_holm": 0.7421698511337769,
+        "significant_005": false
+      },
+      {
+        "comparison": "weekday",
+        "test": "Kruskal\u2013Wallis",
+        "statistic": 2.2285696046892354,
+        "p_value": 0.8975227929854895,
+        "epsilon_squared": 0.0,
+        "groups": 7,
+        "n": 888,
+        "p_holm": 0.8975227929854895,
+        "significant_005": false
+      }
+    ]
+  },
+  "selected_model": "Random Forest",
+  "selection_metric": "Lowest five-fold training CV RMSLE",
+  "split_counts": {
+    "train": 532,
+    "calibration": 178,
+    "test": 178
+  },
+  "test_metrics": [
+    {
+      "model": "Median baseline",
+      "MAE": 4481.128056729519,
+      "RMSE": 29285.186562269682,
+      "R2": -0.02332515238651145,
+      "RMSLE": 2.482808302858801,
+      "log_R2": -0.0002461858229645397
+    },
+    {
+      "model": "Linear Regression",
+      "MAE": 4477.282913903393,
+      "RMSE": 29257.89214418563,
+      "R2": -0.021418519603957575,
+      "RMSLE": 2.3986805731602128,
+      "log_R2": 0.06639028666207525
+    },
+    {
+      "model": "Random Forest",
+      "MAE": 4473.635396417017,
+      "RMSE": 29270.138304525426,
+      "R2": -0.02227374681362737,
+      "RMSLE": 2.4031802345379867,
+      "log_R2": 0.06288430270114465
+    },
+    {
+      "model": "Gradient Boosting",
+      "MAE": 4493.331966409098,
+      "RMSE": 29229.20471764227,
+      "R2": -0.019416495443503212,
+      "RMSLE": 2.4690959899153535,
+      "log_R2": 0.010771832350918498
+    }
+  ],
+  "nominal_interval_coverage": 0.8,
+  "observed_test_coverage": 0.7921348314606742,
+  "interval_log_radius": 3.0657418059740453,
+  "raw_sha256": "96cb11caaee467f9fc7b321b0aa177ea7823723bee58b2be33e03a9d9baf474a",
+  "versions": {
+    "python": "3.14.2",
+    "sklearn": "1.8.0",
+    "pandas": "2.3.3",
+    "numpy": "2.3.5"
+  },
+  "limitations": [
+    "Only 888 labeled posts in the supplied sample; measured metrics are not guaranteed future accuracy.",
+    "Followers, account post counts, views, likes, comments and engagement scores are excluded from predictors.",
+    "Follower counts and account flags are collection-time snapshots, not verified pre-publication values.",
+    "No engagement observation window or collection timestamp is supplied: this estimates observed historical engagement, not seven-day engagement.",
+    "Missing captions are treated as empty text; the source cannot distinguish absence from collection failure.",
+    "Posting times use UTC. Associations are observational, unadjusted for audience size and cannot establish causation.",
+    "Caption text is represented by length and punctuation counts; semantic meaning and images are not modeled.",
+    "Prediction intervals are split-conformal intervals under exchangeability; distribution shift can invalidate coverage."
+  ]
+}

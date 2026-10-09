@@ -1,0 +1,10 @@
+test_hashtags_and_timezone (test_project.ProjectTests.test_hashtags_and_timezone) ... ok
+test_interface_pages_and_forms (test_project.ProjectTests.test_interface_pages_and_forms) ... 2026-10-09 12:17:40.739 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+ok
+test_predictions (test_project.ProjectTests.test_predictions) ... ok
+test_target_and_leakage (test_project.ProjectTests.test_target_and_leakage) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 2.112s
+
+OK
